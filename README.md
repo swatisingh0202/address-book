@@ -28,4 +28,37 @@ Some insights into what we'll be looking for (and what we will not):
 
 #SOLUTION
 
-TO-DO
+#How to run the application 
+
+About the application 
+1. The application can be executed from the main method of the class AddressBookApplication , which is springboot main method
+2. Once the application is started the rest resources can be accessed with the resource link as mentioned below 
+3. The application contains some unit and intergration test 
+
+
+#To build the application
+./gradlew clean build
+
+#To run the test 
+./gradlew clean test
+
+#To start the application
+./gradlew bootRun
+
+
+#Read the complete list of person from address book 
+http://localhost:8585/person/
+
+#Answering the questions asked in the test
+1. How many males are in the address book?
+http://localhost:8585/person/personByGender
+
+2. Who is the oldest person in the address book?
+http://localhost:8585/person/oldest
+
+3. How many days older is Bill than Paul?
+http://localhost:8585/person/ageDifference
+
+
+
+
