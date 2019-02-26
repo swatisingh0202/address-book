@@ -3,10 +3,9 @@ package com.gumtree.addressbook.core.service;
 import com.gumtree.addressbook.core.dto.Gender;
 import com.gumtree.addressbook.core.dto.Person;
 import com.gumtree.addressbook.core.exception.NotFoundException;
+import com.gumtree.addressbook.core.fileprocessor.CSVRecordData;
 import com.gumtree.addressbook.core.fileprocessor.FileParser;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
@@ -28,7 +26,6 @@ import org.springframework.stereotype.Service;
 public class DefaultPersonService implements PersonService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPersonService.class);
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
 
     private final String fileLocation;
 
@@ -36,10 +33,13 @@ public class DefaultPersonService implements PersonService {
 
     private final List<Person> personList = new ArrayList<>();
 
+    private final CSVRecordData csvRecordData;
+
     @Autowired
-    public DefaultPersonService(FileParser<CSVRecord> fileParser, @Value("${address.book.file.location}") String fileLocation) {
+    public DefaultPersonService(FileParser<CSVRecord> fileParser, @Value("${address.book.file.location}") String fileLocation , CSVRecordData csvRecordData) {
         this.fileParser = fileParser;
         this.fileLocation = fileLocation;
+        this.csvRecordData = csvRecordData;
         initPersonList();
     }
 
@@ -72,7 +72,7 @@ public class DefaultPersonService implements PersonService {
     }
 
     private void initPersonList() {
-        personList.addAll(fileParser.parseFile(fileLocation, this::createAddressBook));
+        personList.addAll(fileParser.parseFile(fileLocation, csvRecordData::createAddressBookData));
     }
 
     private Person findByName(String name) throws NotFoundException {
@@ -95,19 +95,4 @@ public class DefaultPersonService implements PersonService {
                 .toLocalDate();
     }
 
-    private Optional<Person> createAddressBook(CSVRecord csvRecord) {
-        Optional<Person> addressBook = Optional.empty();
-        try {
-            addressBook = Optional.of(Person.builder()
-                    .name(csvRecord.get(0).trim())
-                    .gender(Gender.fromString(csvRecord.get(1).trim()))
-                    .dateOfBirth(SIMPLE_DATE_FORMAT.parse(csvRecord.get(2)))
-                    .build());
-        } catch (ParseException e) {
-            LOGGER.error("Unable to parse the record. {}", e);
-        } catch(Exception e){
-            LOGGER.error("Unable to parse the record.{}", e);
-        }
-        return addressBook;
-    }
 }

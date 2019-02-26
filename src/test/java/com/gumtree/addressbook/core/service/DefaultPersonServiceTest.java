@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.gumtree.addressbook.core.dto.Gender;
 import com.gumtree.addressbook.core.dto.Person;
 import com.gumtree.addressbook.core.exception.NotFoundException;
+import com.gumtree.addressbook.core.fileprocessor.CSVRecordData;
 import com.gumtree.addressbook.core.fileprocessor.FileParser;
 
 import java.time.LocalDate;
@@ -34,6 +35,9 @@ public class DefaultPersonServiceTest {
     @Mock
     private FileParser<CSVRecord> fileParser;
 
+    @Mock
+    private CSVRecordData csvRecordData;
+
     @InjectMocks
     private DefaultPersonService personService;
 
@@ -41,7 +45,7 @@ public class DefaultPersonServiceTest {
     public void setUp() throws Exception {
         when(fileParser.parseFile(eq("location"), any(Function.class))).thenReturn(getPersonList());
 
-        this.personService = new DefaultPersonService(fileParser, "location");
+        this.personService = new DefaultPersonService(fileParser, "location" , csvRecordData);
     }
 
     @Test
