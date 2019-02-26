@@ -104,9 +104,10 @@ public class DefaultPersonService implements PersonService {
                     .dateOfBirth(SIMPLE_DATE_FORMAT.parse(csvRecord.get(2)))
                     .build());
         } catch (ParseException e) {
-            LOGGER.warn("Unable to parse the record. {}", e);
+            LOGGER.error("Unable to parse the record. {}", e);
+        } catch(Exception e){
+            LOGGER.error("Unable to parse the record.{}", e);
         }
-
         return addressBook;
     }
 }
