@@ -1,6 +1,7 @@
 package com.gumtree.addressbook.core.fileprocessor;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -16,14 +17,14 @@ import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CSVFileParser implements FileParser {
+public class CSVFileParser implements FileParser<CSVRecord> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVFileParser.class);
 
     @Override
     public <T> List<T> parseFile(String fileName, Function<CSVRecord, Optional<T>> mappingFunction) {
         try (
-                Reader reader = new InputStreamReader(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName)));
+                Reader reader = new InputStreamReader(getInputStream(fileName));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
         ) {
             List<T> toReturn = new ArrayList<>();
@@ -38,5 +39,9 @@ public class CSVFileParser implements FileParser {
         }
 
         return Collections.emptyList();
+    }
+
+    private static InputStream getInputStream(String fileName) {
+        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
     }
 }

@@ -5,23 +5,23 @@ public enum Gender {
     MALE("MALE"),
     FEMALE("FEMALE");
 
-    private final String gender;
+    private final String name;
 
-    Gender(String gender) {
-        this.gender = gender;
+    Gender(String name) {
+        this.name = name;
     }
 
-    public static Gender fromString(String gender) {
-        if (gender != null) {
-            for (Gender genderName : values())
-                if (genderName.gender.equalsIgnoreCase(gender)) {
-                    return genderName;
+    public static Gender fromString(String name) {
+        if (name != null) {
+            for (Gender gender : values())
+                if (gender.name.equalsIgnoreCase(name)) {
+                    return gender;
                 }
         }
-        throw new IllegalArgumentException("Can not resolve the passed gender parameter ");
+        throw new IllegalArgumentException("Can not resolve the passed name parameter ");
     }
 
-    public String getGender() {
-        return gender;
+    public String getName() {
+        return name;
     }
 }
