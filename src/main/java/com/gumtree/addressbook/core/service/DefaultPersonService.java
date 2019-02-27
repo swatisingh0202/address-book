@@ -3,7 +3,6 @@ package com.gumtree.addressbook.core.service;
 import com.gumtree.addressbook.core.dto.Gender;
 import com.gumtree.addressbook.core.dto.Person;
 import com.gumtree.addressbook.core.exception.NotFoundException;
-import com.gumtree.addressbook.core.fileprocessor.CSVRecordData;
 import com.gumtree.addressbook.core.fileprocessor.FileParser;
 
 import java.time.Instant;
@@ -33,13 +32,13 @@ public class DefaultPersonService implements PersonService {
 
     private final List<Person> personList = new ArrayList<>();
 
-    private final CSVRecordData csvRecordData;
+    private final AddressBookMapper addressBookMapper;
 
     @Autowired
-    public DefaultPersonService(FileParser<CSVRecord> fileParser, @Value("${address.book.file.location}") String fileLocation , CSVRecordData csvRecordData) {
+    public DefaultPersonService(FileParser<CSVRecord> fileParser, @Value("${address.book.file.location}") String fileLocation , AddressBookMapper addressBookMapper) {
         this.fileParser = fileParser;
         this.fileLocation = fileLocation;
-        this.csvRecordData = csvRecordData;
+        this.addressBookMapper = addressBookMapper;
         initPersonList();
     }
 
@@ -72,7 +71,7 @@ public class DefaultPersonService implements PersonService {
     }
 
     private void initPersonList() {
-        personList.addAll(fileParser.parseFile(fileLocation, csvRecordData::createAddressBookData));
+        personList.addAll(fileParser.parseFile(fileLocation, addressBookMapper::createAddressBookData));
     }
 
     private Person findByName(String name) throws NotFoundException {

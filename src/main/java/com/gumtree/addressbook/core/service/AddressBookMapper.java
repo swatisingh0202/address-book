@@ -1,8 +1,7 @@
-package com.gumtree.addressbook.core.fileprocessor;
+package com.gumtree.addressbook.core.service;
 
 import com.gumtree.addressbook.core.dto.Gender;
 import com.gumtree.addressbook.core.dto.Person;
-import com.gumtree.addressbook.core.service.DefaultPersonService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CSVRecordData {
+public class AddressBookMapper {
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
 
