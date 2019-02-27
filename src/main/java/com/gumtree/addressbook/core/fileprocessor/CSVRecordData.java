@@ -11,7 +11,9 @@ import java.util.Optional;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CSVRecordData {
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
@@ -19,7 +21,6 @@ public class CSVRecordData {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPersonService.class);
 
     public  Optional<Person> createAddressBookData(CSVRecord csvRecord) {
-        Optional<Person> addressBook = Optional.empty();
         try {
             return Optional.of(Person.builder()
                         .name(csvRecord.get(0).trim())
@@ -31,6 +32,6 @@ public class CSVRecordData {
         } catch(Exception e){
             LOGGER.error("Unable to parse the record.{}", e);
         }
-        return addressBook;
+        return Optional.empty();
     }
 }
